@@ -17,8 +17,8 @@
 var ReactRAFBatchingStrategy = require('./ReactRAFBatchingStrategy');
 var ReactUpdates = require('react/lib/ReactUpdates');
 
-function inject() {
-  ReactUpdates.injection.injectBatchingStrategy(ReactRAFBatchingStrategy);
+function inject(raf) {
+  ReactUpdates.injection.injectBatchingStrategy(ReactRAFBatchingStrategy(raf));
 }
 
 var ReactRAFBatching = {

@@ -20,25 +20,25 @@
 
 var ReactUpdates = require('react/lib/ReactUpdates');
 
-var requestAnimationFrame = require('./requestAnimationFrame');
-
-function tick() {
-  ReactUpdates.flushBatchedUpdates();
-  requestAnimationFrame(tick);
-}
-
-var ReactRAFBatchingStrategy = {
-  isBatchingUpdates: true,
-
-  /**
-   * Call the provided function in a context within which calls to `setState`
-   * and friends are batched such that components aren't updated unnecessarily.
-   */
-  batchedUpdates: function(callback, param) {
-    callback(param);
+module.exports = function(raf) {
+  function tick() {
+    ReactUpdates.flushBatchedUpdates();
+    raf(tick);
   }
+
+  var ReactRAFBatchingStrategy = {
+    isBatchingUpdates: true,
+
+    /**
+     * Call the provided function in a context within which calls to `setState`
+     * and friends are batched such that components aren't updated unnecessarily.
+     */
+    batchedUpdates: function(callback, param) {
+      callback(param);
+    }
+  };
+
+  raf(tick);
+
+  return ReactRAFBatchingStrategy;
 };
-
-requestAnimationFrame(tick);
-
-module.exports = ReactRAFBatchingStrategy;
